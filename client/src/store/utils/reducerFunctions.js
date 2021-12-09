@@ -92,3 +92,15 @@ export const updateMessagesForConvoInStore = (state, conversationId, messages) =
     }
   });
 }
+
+export const setUnreadMessageCountForConvoInStore = (state, conversationId, newCount) => {
+  return state.map((convo) => {
+    if (convo.id === conversationId) {
+      const convoCopy = { ...convo };
+      convoCopy.unreadMessageCount = newCount;
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+}
