@@ -133,7 +133,7 @@ const setConversationRead = (data) => {
 
 export const markConversationRead = (body) => async (dispatch) => {
   try {
-    const { data } = await putConversation(body);
+    const data = await putConversation(body);
     dispatch(setUnreadMessageCount(body.conversationId, 0));
     setConversationRead(data);
   } catch (error) {

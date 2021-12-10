@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
 import { connect } from "react-redux";
+import { markConversationRead } from "../../store/utils/thunkCreators";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,6 +25,14 @@ const ActiveChat = (props) => {
   const classes = useStyles();
   const { user } = props;
   const conversation = props.conversation || {};
+
+  useEffect(() => {
+    // Set unreadMessageCount to 0 for ActiveChat conversation
+    if (conversation.unreadMessageCount > 0) {
+      const reqBody = {"conversationId": conversation.id};
+      props.markConversationRead(reqBody);
+    }
+  });
 
   return (
     <Box className={classes.root}>
@@ -62,4 +71,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(ActiveChat);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    markConversationRead: (conversationId) => {
+      dispatch(markConversationRead(conversationId));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveChat);

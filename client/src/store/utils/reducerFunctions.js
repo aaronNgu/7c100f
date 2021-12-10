@@ -6,6 +6,8 @@ export const addMessageToStore = (state, payload) => {
       id: message.conversationId,
       otherUser: sender,
       messages: [message],
+      // new conversation definitely not active conversation
+      unreadMessageCount: 1,
     };
     newConvo.latestMessageText = message.text;
     return [newConvo, ...state];
@@ -13,9 +15,17 @@ export const addMessageToStore = (state, payload) => {
 
   return state.map((convo) => {
     if (convo.id === message.conversationId) {
+
+      // TODO: existing conveersation should have unreadMessageCount
+      // remove when backend fixed
+      const unreadMessageCount = convo.unreadMessageCount
+        ? convo.unreadMessageCount + 1
+        : 1;
+
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
+      convoCopy.unreadMessageCount = unreadMessageCount;
       return convoCopy;
     } else {
       return convo;
@@ -81,7 +91,11 @@ export const addNewConvoToStore = (state, recipientId, message) => {
   });
 };
 
-export const updateMessagesForConvoInStore = (state, conversationId, messages) => {
+export const updateMessagesForConvoInStore = (
+  state,
+  conversationId,
+  messages
+) => {
   return state.map((convo) => {
     if (convo.id === conversationId) {
       const convoCopy = { ...convo };
@@ -91,9 +105,13 @@ export const updateMessagesForConvoInStore = (state, conversationId, messages) =
       return convo;
     }
   });
-}
+};
 
-export const setUnreadMessageCountForConvoInStore = (state, conversationId, newCount) => {
+export const setUnreadMessageCountForConvoInStore = (
+  state,
+  conversationId,
+  newCount
+) => {
   return state.map((convo) => {
     if (convo.id === conversationId) {
       const convoCopy = { ...convo };
@@ -103,4 +121,4 @@ export const setUnreadMessageCountForConvoInStore = (state, conversationId, newC
       return convo;
     }
   });
-}
+};
