@@ -21,8 +21,10 @@ const UnreadMessageCount = (props) => {
     const classes = useStyles();
 
     const { unreadMessageCount } = props;
-
+    const  hasUnreadMessages = unreadMessageCount > 0;
+    
     return (
+        hasUnreadMessages &&
         <Box className={classes.root}>
             <Typography className={classes.count}>
                 {unreadMessageCount}

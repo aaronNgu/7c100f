@@ -22,6 +22,7 @@ socket.on("connect", () => {
   socket.on("new-message", (data) => {
     store.dispatch(setNewMessage(data.message, data.sender));
   });
+  // update mesasges of conversationId when recipient read the messages
   socket.on("read-conversation", (data) => {
     store.dispatch(updateMessages(data.conversationId, data.messages));
   });

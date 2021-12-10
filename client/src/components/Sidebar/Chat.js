@@ -24,7 +24,6 @@ const Chat = (props) => {
   const classes = useStyles();
   const { conversation } = props;
   const { otherUser, unreadMessageCount } = conversation;
-  const hasUnreadMessages = unreadMessageCount > 0;
 
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
@@ -40,9 +39,7 @@ const Chat = (props) => {
       />
       <ChatContent conversation={conversation} />
       <Box>
-      {hasUnreadMessages && (
           <UnreadMessageCount unreadMessageCount={unreadMessageCount} />
-        )}
       </Box>
     </Box>
   );

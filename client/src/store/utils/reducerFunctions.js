@@ -1,5 +1,5 @@
 export const addMessageToStore = (state, payload) => {
-  const { message, sender } = payload;
+  const { message, sender, userId } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
   if (sender !== null) {
     const newConvo = {
@@ -15,17 +15,13 @@ export const addMessageToStore = (state, payload) => {
 
   return state.map((convo) => {
     if (convo.id === message.conversationId) {
-
-      // TODO: existing conveersation should have unreadMessageCount
-      // remove when backend fixed
-      const unreadMessageCount = convo.unreadMessageCount
-        ? convo.unreadMessageCount + 1
-        : 1;
-
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
-      convoCopy.unreadMessageCount = unreadMessageCount;
+      // only update unreadMessageCount if message was sent by other
+      if (message.senderId !== userId) {
+        convoCopy.unreadMessageCount = convo.unreadMessageCount + 1;
+      }
       return convoCopy;
     } else {
       return convo;

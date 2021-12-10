@@ -29,10 +29,11 @@ export const gotConversations = (conversations) => {
   };
 };
 
-export const setNewMessage = (message, sender) => {
+// userId to check if message was sent by other user to update unreadMessageCount accordingly 
+export const setNewMessage = (message, sender, userId) => {
   return {
     type: SET_MESSAGE,
-    payload: { message, sender: sender || null },
+    payload: { message, sender: sender || null, userId: userId || null },
   };
 };
 
