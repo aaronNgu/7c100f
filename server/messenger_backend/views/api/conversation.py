@@ -8,8 +8,9 @@ from messenger_backend.utils.conversation_helper import set_is_last_read
 class SingleConversation(APIView):
 
     def put(self, request: Request):
-        """expects {conversationId} mark isRead for all messages where user is not the sender to True. 
-        returns the updated list of messages"""
+        """expects {conversationId} mark isRead to True 
+        for all messages where current user is not the sender. 
+        returns the {conversationId, messages}"""
         try:
             user = get_user(request)
 
@@ -18,6 +19,7 @@ class SingleConversation(APIView):
             user_id = user.id
 
             conversation_id = request.data.get("conversationId")
+            # converastion id must be int
             if type(conversation_id) is not int:
                 return HttpResponse(status=404)
             convo = Conversation.objects.get(id=conversation_id)
@@ -25,7 +27,7 @@ class SingleConversation(APIView):
             if not convo:
                 return HttpResponse(status=404)
 
-            # Mark isRead for all messages read by user
+            # Mark isRead for all messages read by current user
             messages = Message.objects.filter(conversation=convo).order_by("createdAt")
             messages_for_user = messages.exclude(senderId=user_id)
             unread_messages_for_user = messages_for_user.filter(isRead=False)
@@ -35,7 +37,8 @@ class SingleConversation(APIView):
                 ["id", "text", "senderId", "createdAt", "isRead"])
                 for message in messages.all()]
 
-            # set is_last_read flag for message that was last read by user
+            # set isLastRead flag for message that was last read by current user
+            # these messages will be sent to the other user through socket
             set_is_last_read(messages, user_id)
 
             return JsonResponse(
