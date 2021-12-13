@@ -27,6 +27,9 @@ class SingleConversation(APIView):
             if not convo:
                 return HttpResponse(status=404)
 
+            if convo.user1.id != user_id and convo.user2.id != user_id:
+                return HttpResponse(status=401)
+
             # Mark isRead for all messages read by current user
             messages = Message.objects.filter(conversation=convo).order_by("createdAt")
             messages_for_user = messages.exclude(senderId=user_id)
