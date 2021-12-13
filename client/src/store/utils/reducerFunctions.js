@@ -6,7 +6,6 @@ export const addMessageToStore = (state, payload) => {
       id: message.conversationId,
       otherUser: sender,
       messages: [message],
-      // new conversation definitely not active conversation
       unreadMessageCount: 1,
     };
     newConvo.latestMessageText = message.text;
@@ -18,9 +17,8 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
-      // only update unreadMessageCount if message was sent by other
       if (message.senderId !== userId) {
-        convoCopy.unreadMessageCount = convo.unreadMessageCount + 1;
+        convoCopy.unreadMessageCount += 1;
       }
       return convoCopy;
     } else {

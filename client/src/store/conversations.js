@@ -29,7 +29,6 @@ export const gotConversations = (conversations) => {
   };
 };
 
-// userId to check if message was sent by other user to update unreadMessageCount accordingly 
 export const setNewMessage = (message, sender, userId) => {
   return {
     type: SET_MESSAGE,
