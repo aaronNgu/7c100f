@@ -23,16 +23,16 @@ const useStyles = makeStyles(() => ({
 
 const ActiveChat = (props) => {
   const classes = useStyles();
-  const { user } = props;
+  const { user, markConversationRead } = props;
   const conversation = props.conversation || {};
 
   useEffect(() => {
     // Set unreadMessageCount to 0 for ActiveChat conversation
     if (conversation.unreadMessageCount > 0) {
       const reqBody = {"conversationId": conversation.id};
-      props.markConversationRead(reqBody);
+      markConversationRead(reqBody);
     }
-  });
+  }, [conversation.unreadMessageCount, conversation.id, markConversationRead]);
 
   return (
     <Box className={classes.root}>
