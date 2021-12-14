@@ -27,7 +27,6 @@ const ActiveChat = (props) => {
   const conversation = props.conversation || {};
 
   useEffect(() => {
-    // Set unreadMessageCount to 0 for ActiveChat conversation
     if (conversation.unreadMessageCount > 0) {
       const reqBody = {"conversationId": conversation.id};
       markConversationRead(reqBody);

@@ -6,7 +6,7 @@ from messenger_backend.models import Conversation, Message
 from online_users import online_users
 from rest_framework.views import APIView
 from rest_framework.request import Request
-from messenger_backend.utils.conversation_helper import set_is_last_read, count_unread_messages
+from messenger_backend.utils.conversation_helper import set_is_last_read
 
 
 class Conversations(APIView):
@@ -45,8 +45,8 @@ class Conversations(APIView):
 
                 # set properties for notification count and latest message preview
                 convo_dict["latestMessageText"] = convo_dict["messages"][-1]["text"]
-                convo_dict["unreadMessageCount"] = count_unread_messages(
-                    convo_dict["messages"], user_id)
+                convo_dict["unreadMessageCount"] = convo.messages.filter(isRead=False) \
+                                                        .exclude(senderId=user_id).count()
 
                 # set a property "otherUser" so that frontend will have easier access
                 user_fields = ["id", "username", "photoUrl"]
